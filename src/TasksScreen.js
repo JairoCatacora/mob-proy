@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, Button } from "react-native";
 import { listTasks, logout, getRoleBasedOnToken, saveTask } from "./api";
 
-const TasksScreen = ({ setIsLoggedIn }) => {
+const TasksScreen = ({ setIsLoggedIn, route }) => {
   const [tasks, setTasks] = useState([]);
 
-  const getTasks = async () => {
+  const { tareas } = route.params;
+
+  const all = async () => {
     try {
       const data = await listTasks();
       setTasks(data.content);
@@ -34,7 +36,7 @@ const TasksScreen = ({ setIsLoggedIn }) => {
 
   useEffect(() => {
     getRole();
-    getTasks();
+    all();
   }, []);
 
   const handleLogout = async () => {
@@ -42,15 +44,23 @@ const TasksScreen = ({ setIsLoggedIn }) => {
     setIsLoggedIn(false);
   };
 
+  const Item = ({ name, ubication }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{name}</Text>
+      <Text style={styles.title}>{ubication}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Text>Tareas:</Text>
-      {/* <FlatList
-        data={tasks}
-        renderItem={renderItem}
+      <FlatList
+        data={tareas}
+        renderItem={({ item }) => (
+          <Item id={item.id} name={item.name} ubication={item.ubication} />
+        )}
         keyExtractor={(item) => item.id}
-        extraData={selectedId}
-      /> */}
+      />
 
       <Button onPress={createTask} title="Crear nueva tarea" color="#841584" />
 

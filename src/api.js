@@ -99,18 +99,20 @@ export const saveEmergenciaNatural = async (name, description, importance) => {
 
 export const deleteEmergenciaNatural = async (id) => {
   const token = await AsyncStorage.getItem("token");
-  const response = await axios.delete(
-    `${API_URL}/emergenciaNatural/${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await axios.delete(`${API_URL}/emergenciaNatural/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
-export const updateEmergenciaNatural = async (id, name, description, importance) => {
+export const updateEmergenciaNatural = async (
+  id,
+  name,
+  description,
+  importance
+) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.patch(
     `${API_URL}/emergenciaNatural/${id}`,
@@ -130,8 +132,32 @@ export const updateEmergenciaNatural = async (id, name, description, importance)
 
 export const listEmergenciaNatural = async () => {
   const token = await AsyncStorage.getItem("token");
-  const response = await axios.get(
-    `${API_URL}/emergenciaNatural/`,
+  const response = await axios.get(`${API_URL}/emergenciaNatural/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const listLugares = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/lugar/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const createLugar = async (name, ubication) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.post(
+    `${API_URL}/lugar/`,
+    {
+      name,
+      ubication,
+    },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -139,7 +165,34 @@ export const listEmergenciaNatural = async () => {
     }
   );
   return response.data;
-}
+};
+
+export const updateLugar = async (id, name, ubication) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/lugar/${id}`,
+    {
+      name,
+      ubication,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const deleteLugar = async (id) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.delete(`${API_URL}/lugar/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 
 export const logout = async () => {
   await AsyncStorage.removeItem("token");
