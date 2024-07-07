@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { updatePlan } from "../api";
 
-const PlanUpdate = ({
-  item,
-  setUpdateList,
-  setUpdate,
-  updateList,
-  setCreate,
-}) => {
+const PlanUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -16,19 +10,12 @@ const PlanUpdate = ({
 
   const actualizar = async () => {
     try {
-      await updatePlan(id, name, description,state);
+      await updatePlan(id, name, description, state);
       setUpdateList(!updateList);
-      setUpdate(false);
-      setCreate(false);
+      setModalUpdate(false);
     } catch (error) {
       console.error("Update failed", error);
     }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setUpdate(false);
-    setCreate(false);
   };
 
   useEffect(() => {
@@ -51,7 +38,6 @@ const PlanUpdate = ({
       <Text>Estado:</Text>
       <TextInput style={styles.input} value={state} onChangeText={setState} />
       <Button title="Actualizar" onPress={actualizar} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };

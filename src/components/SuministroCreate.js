@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { createSuministro, tareasDisponibles } from "../api";
+import {
+  createSuministro,
+  tareasDisponibles,
+  asignarSuministroATarea,
+} from "../api";
 import DropdownComponent from "./Dropdown";
 
 const SuministroCreate = ({ setUpdateList, setModalCreate, updateList }) => {
@@ -24,7 +28,8 @@ const SuministroCreate = ({ setUpdateList, setModalCreate, updateList }) => {
 
   const crear = async () => {
     try {
-      await createSuministro(name, stock, tareaId);
+      const { id } = await createSuministro(name, stock, tareaId);
+      await asignarSuministroATarea(id, tareaId);
       setUpdateList(!updateList);
       setModalCreate(false);
     } catch (error) {

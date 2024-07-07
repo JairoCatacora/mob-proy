@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Pressable,
+} from "react-native";
 import { deletePlan, getPerfil, listPlans, participatePlan } from "../../api";
 import PlanCreate from "../../components/PlanCreate";
 import PlanUpdate from "../../components/PlanUpdate";
 
 const PlanScreen = ({}) => {
   const [planes, setPlanes] = useState([]);
-  const [createForm, setCreateForm] = useState(false);
-  const [updateForm, setUpdateForm] = useState(false);
   const [plan, setPlan] = useState("");
   const [updateList, setUpdateList] = useState(false);
   const [miPlanes, setMiPlanes] = useState("");
 
+  const [modalCreate, setModalCreate] = useState(false);
+  const [modalUpdate, setModalUpdate] = useState(false);
+
   const crear = async () => {
-    setCreateForm(true);
+    setModalCreate(true);
   };
 
   const actualizar = async (item) => {
     setPlan(item);
-    setUpdateForm(true);
+    setModalUpdate(true);
   };
 
   const participar = async (id) => {
@@ -115,24 +124,7 @@ const PlanScreen = ({}) => {
 
   return (
     <View style={styles.container}>
-      {createForm && !updateForm ? (
-        <PlanCreate
-          setUpdateList={setUpdateList}
-          setCreate={setCreateForm}
-          updateList={updateList}
-        />
-      ) : (
-        !updateForm && <Button title="Crear" onPress={crear} />
-      )}
-      {updateForm && (
-        <PlanUpdate
-          item={plan}
-          setUpdateList={setUpdateList}
-          setUpdate={setUpdateForm}
-          setCreate={setCreateForm}
-          updateList={updateList}
-        />
-      )}
+      <Button title="Crear" onPress={crear} />
 
       <Text>Mis planes:</Text>
       <FlatList
@@ -161,6 +153,55 @@ const PlanScreen = ({}) => {
         )}
         keyExtractor={(item) => item.id}
       />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalCreate}
+        onRequestClose={() => {
+          setModalCreate(!modalCreate);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <PlanCreate
+              setUpdateList={setUpdateList}
+              setModalCreate={setModalCreate}
+              updateList={updateList}
+            />
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalCreate(!modalCreate)}
+            >
+              <Text style={styles.textStyle}>Cancelar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalUpdate}
+        onRequestClose={() => {
+          setModalUpdate(!setModalUpdate);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <PlanUpdate
+              item={plan}
+              setUpdateList={setUpdateList}
+              setModalUpdate={setModalUpdate}
+              updateList={updateList}
+            />
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalUpdate(!modalUpdate)}
+            >
+              <Text style={styles.textStyle}>Cancelar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -187,6 +228,44 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     gap: 8,
+  },
+  centeredView: {
+    width: "100%",
+    height: "100%",
+    flex: 1,
+    marginTop: 22,
+  },
+  modalView: {
+    width: "100%",
+    height: "100%",
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { createPlan } from "../api";
 
-const PlanCreate = ({ setUpdateList, setCreate, updateList }) => {
+const PlanCreate = ({ setUpdateList, setModalCreate, updateList }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [state, setState] = useState("");
@@ -11,15 +11,10 @@ const PlanCreate = ({ setUpdateList, setCreate, updateList }) => {
     try {
       await createPlan(name, description, state);
       setUpdateList(!updateList);
-      setCreate(false);
+      setModalCreate(false);
     } catch (error) {
       console.error("Registration failed", error);
     }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setCreate(false);
   };
 
   return (
@@ -35,7 +30,6 @@ const PlanCreate = ({ setUpdateList, setCreate, updateList }) => {
       <Text>Estado:</Text>
       <TextInput style={styles.input} value={state} onChangeText={setState} />
       <Button title="Crear" onPress={crear} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };

@@ -13,7 +13,7 @@ import { deleteTarea, tareasDisponibles } from "../../api";
 import TareaCreate from "../../components/TareaCreate";
 import TareaUpdate from "../../components/TareaUpdate";
 
-const TareaCoordinadorScreen = ({ setIsLoggedIn, route }) => {
+const TareaCoordinadorScreen = ({ route }) => {
   const [tasks, setTasks] = useState([]);
   const [tarea, setTarea] = useState([]);
   const [updateList, setUpdateList] = useState(false);

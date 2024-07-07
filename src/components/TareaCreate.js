@@ -20,44 +20,11 @@ const TareaCreate = ({ setUpdateList, setModalCreate, updateList, set }) => {
   const [planId, setPlanId] = useState([]);
   const [lugarId, setLugarId] = useState([]);
 
-  const [name, setName] = useState([]);
-  const [stock, setStock] = useState([]);
-
-  const [suministros, setSuministros] = useState([]);
-
   const crear = async () => {
-    const suministrosList = suministros.map((item) => ({
-      name: item.name,
-      stock: item.stock,
-    }));
-
     try {
-      await saveTask(
-        title,
-        description,
-        status,
-        planId,
-        lugarId,
-        suministrosList
-      );
+      await saveTask(title, description, status, planId, lugarId);
       setUpdateList(!updateList);
       setModalCreate(false);
-    } catch (error) {
-      console.error("Registration failed", error);
-    }
-  };
-
-  const crearSuministro = async () => {
-    try {
-      const suministrosList = [
-        ...suministros,
-        {
-          key: suministros.length + 1,
-          name,
-          stock,
-        },
-      ];
-      setSuministros(suministrosList);
     } catch (error) {
       console.error("Registration failed", error);
     }
@@ -91,13 +58,6 @@ const TareaCreate = ({ setUpdateList, setModalCreate, updateList, set }) => {
     }
   };
 
-  const ItemSuministro = ({ name, stock }) => (
-    <View>
-      <Text>Nombre: {name}</Text>
-      <Text>Stock: {stock}</Text>
-    </View>
-  );
-
   useEffect(() => {
     getPlanes();
     getLugares();
@@ -127,23 +87,6 @@ const TareaCreate = ({ setUpdateList, setModalCreate, updateList, set }) => {
         value={lugarId}
         setValue={setLugarId}
       />
-
-      <View>
-        <Text>Suministros:</Text>
-        <FlatList
-          data={suministros}
-          renderItem={({ item }) => (
-            <ItemSuministro name={item.name} stock={item.stock} />
-          )}
-          keyExtractor={(item) => item.key}
-        />
-
-        <Text>Titulo:</Text>
-        <TextInput style={styles.input} value={name} onChangeText={setName} />
-        <Text>Stock:</Text>
-        <TextInput style={styles.input} value={stock} onChangeText={setStock} />
-        <Button title="Crear Suministro" onPress={crearSuministro} />
-      </View>
 
       <Button title="Crear Tarea" onPress={crear} />
     </ScrollView>

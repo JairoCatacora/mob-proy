@@ -71,14 +71,7 @@ export const listTasks = async () => {
   return response.data;
 };
 
-export const saveTask = async (
-  title,
-  description,
-  status,
-  planId,
-  lugarId,
-  suministros
-) => {
+export const saveTask = async (title, description, status, planId, lugarId) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.post(
     `${API_URL}/tareas/`,
@@ -88,7 +81,6 @@ export const saveTask = async (
       status,
       planId,
       lugarId,
-      suministros,
     },
     {
       headers: {
@@ -260,13 +252,13 @@ export const createLugar = async (name, ubication) => {
   return response.data;
 };
 
-export const updateLugar = async (id, name, stock) => {
+export const updateLugar = async (id, name, ubication) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.patch(
     `${API_URL}/lugar/${id}`,
     {
       name,
-      stock,
+      ubication,
     },
     {
       headers: {
@@ -438,6 +430,20 @@ export const listSuministros = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
+};
+
+export const asignarSuministroATarea = async (id, idTarea) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/suministro/${id}/tarea/${idTarea}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 

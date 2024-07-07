@@ -5,30 +5,22 @@ import { updateEmergenciaNatural } from "../api";
 const EmergenciaNaturalUpdate = ({
   item,
   setUpdateList,
-  setUpdate,
   updateList,
-  setCreate,
+  setModalUpdate,
 }) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [importance, setImportance] = useState("");
 
-  const actualizarEmergenciaNatural = async () => {
+  const actualizar = async () => {
     try {
       await updateEmergenciaNatural(id, name, description, importance);
       setUpdateList(!updateList);
-      setUpdate(false);
-      setCreate(false);
+      setModalUpdate(false);
     } catch (error) {
       console.error("Update failed", error);
     }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setUpdate(false);
-    setCreate(false);
   };
 
   useEffect(() => {
@@ -54,8 +46,7 @@ const EmergenciaNaturalUpdate = ({
         value={importance}
         onChangeText={setImportance}
       />
-      <Button title="Actualizar" onPress={actualizarEmergenciaNatural} />
-      <Button title="Cancelar" onPress={cancel} />
+      <Button title="Actualizar" onPress={actualizar} />
     </View>
   );
 };

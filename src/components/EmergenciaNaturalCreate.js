@@ -2,24 +2,23 @@ import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { saveEmergenciaNatural } from "../api";
 
-const EmergenciaNaturalCreate = ({ setUpdateList, setCreate, updateList }) => {
+const EmergenciaNaturalCreate = ({
+  setUpdateList,
+  setModalCreate,
+  updateList,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [importance, setImportance] = useState("");
 
-  const createEmergenciaNatural = async () => {
+  const crear = async () => {
     try {
       await saveEmergenciaNatural(name, description, importance);
       setUpdateList(!updateList);
-      setCreate(false);
+      setModalCreate(false);
     } catch (error) {
       console.error("Registration failed", error);
     }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setCreate(false);
   };
 
   return (
@@ -38,8 +37,7 @@ const EmergenciaNaturalCreate = ({ setUpdateList, setCreate, updateList }) => {
         value={importance}
         onChangeText={setImportance}
       />
-      <Button title="Crear" onPress={createEmergenciaNatural} />
-      <Button title="Cancelar" onPress={cancel} />
+      <Button title="Crear" onPress={crear} />
     </View>
   );
 };

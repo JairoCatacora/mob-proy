@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { updateLugar } from "../api";
 
-const LugarUpdate = ({
-  item,
-  setUpdateList,
-  setUpdate,
-  updateList,
-  setCreate,
-}) => {
+const LugarUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [ubication, setUbication] = useState("");
@@ -17,17 +11,10 @@ const LugarUpdate = ({
     try {
       await updateLugar(id, name, ubication);
       setUpdateList(!updateList);
-      setUpdate(false);
-      setCreate(false);
+      setModalUpdate(false);
     } catch (error) {
       console.error("Update failed", error);
     }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setUpdate(false);
-    setCreate(false);
   };
 
   useEffect(() => {
@@ -47,7 +34,6 @@ const LugarUpdate = ({
         onChangeText={setUbication}
       />
       <Button title="Actualizar" onPress={actualizar} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };

@@ -12,7 +12,7 @@ import { deleteLugar, listLugares } from "../../api";
 import LugarCreate from "../../components/LugarCreate";
 import LugarUpdate from "../../components/LugarUpdate";
 
-const LugaresScreen = ({ navigation }) => {
+const LugaresScreen = ({}) => {
   const [lugares, setLugares] = useState([]);
   const [emergencia, setEmergencia] = useState("");
   const [updateList, setUpdateList] = useState(false);
@@ -47,28 +47,35 @@ const LugaresScreen = ({ navigation }) => {
     }
   };
 
-  const verTareas = async (item) => {
-    try {
-      navigation.navigate("Tareas", { tareas: item.tareas });
-    } catch (error) {
-      console.error("List failed", error);
-    }
-  };
-
   useEffect(() => {
     all();
   }, [updateList]);
 
-  const Item = ({ id, name, ubication }) => (
+  const ItemTarea = ({ id, name, description }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{name}</Text>
+      <Text style={styles.title}>{description}</Text>
+    </View>
+  );
+
+  const Item = ({ id, name, ubication, tareas }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{name}</Text>
       <Text style={styles.title}>{ubication}</Text>
+      <Text style={styles.title}>Tareas:</Text>
 
-      <Button
-        title="Ver tareas"
-        color="#f194ff"
-        onPress={() => verTareas({ id })}
+      <FlatList
+        data={tareas}
+        renderItem={({ item }) => (
+          <ItemTarea
+            id={item.id}
+            title={item.title}
+            description={item.description}
+          />
+        )}
+        keyExtractor={(item) => item.id}
       />
+
       <Button
         title="Actualizar"
         color="#f194ff"
@@ -85,7 +92,12 @@ const LugaresScreen = ({ navigation }) => {
       <FlatList
         data={lugares}
         renderItem={({ item }) => (
-          <Item id={item.id} name={item.name} ubication={item.ubication} />
+          <Item
+            id={item.id}
+            name={item.name}
+            ubication={item.ubication}
+            tareas={item.tareas}
+          />
         )}
         keyExtractor={(item) => item.id}
       />
@@ -126,8 +138,7 @@ const LugaresScreen = ({ navigation }) => {
             <LugarUpdate
               item={emergencia}
               setUpdateList={setUpdateList}
-              setUpdate={setUpdateForm}
-              setCreate={setCreateForm}
+              setModalUpdate={setModalUpdate}
               updateList={updateList}
             />
             <Pressable
