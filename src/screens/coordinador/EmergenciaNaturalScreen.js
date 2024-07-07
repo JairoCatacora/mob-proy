@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
-import { deleteEmergenciaNatural, listEmergenciaNatural } from "./api";
-import EmergenciaNaturalCreate from "./components/EmergenciaNaturalCreate";
-import EmergenciaNaturalUpdate from "./components/EmergenciaNaturalUpdate";
+import { deleteEmergenciaNatural, listEmergenciaNatural } from "../../api";
+import EmergenciaNaturalCreate from "../../components/EmergenciaNaturalCreate";
+import EmergenciaNaturalUpdate from "../../components/EmergenciaNaturalUpdate";
 
 const EmergenciaNaturalScreen = ({}) => {
   const [emergencias, setEmergencias] = useState([]);

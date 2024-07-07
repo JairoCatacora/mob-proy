@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
-import { deletePlan, getPerfil, listPlans, participatePlan } from "./api";
-import PlanCreate from "./components/PlanCreate";
-import PlanUpdate from "./components/PlanUpdate";
+import { deletePlan, getPerfil, listPlans, participatePlan } from "../../api";
+import PlanCreate from "../../components/PlanCreate";
+import PlanUpdate from "../../components/PlanUpdate";
 
-const PlanScreen = ({ navigation }) => {
+const PlanScreen = ({}) => {
   const [planes, setPlanes] = useState([]);
   const [createForm, setCreateForm] = useState(false);
   const [updateForm, setUpdateForm] = useState(false);

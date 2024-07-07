@@ -5,10 +5,11 @@ import {
   getCoordinadorPerfil,
   getRoleBasedOnToken,
   getVoluntarioPerfil,
-} from "./api";
+} from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ROLE_COORDINATOR, ROLE_VOLUNTEER } from "../constants/role";
 
-const LoginScreen = ({ navigation, setIsLoggedIn }) => {
+const LoginScreen = ({ navigation, setIsLoggedIn, setRole }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,12 +19,13 @@ const LoginScreen = ({ navigation, setIsLoggedIn }) => {
       setIsLoggedIn(true);
 
       const role = await getRoleBasedOnToken();
+      setRole(role);
 
-      if (role === "ROLE_COORDINATOR") {
+      if (role === ROLE_COORDINATOR) {
         await getCoordinadorPerfil();
       }
 
-      if (role === "ROLE_VOLUNTEER") {
+      if (role === ROLE_VOLUNTEER) {
         await getVoluntarioPerfil();
       }
     } catch (error) {

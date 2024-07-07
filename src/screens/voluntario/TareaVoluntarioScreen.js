@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import {
+  deleteTarea,
   getPerfil,
-  logout,
   participarTarea,
   tareasDisponibles,
-  updateTarea,
-} from "./api";
-import TareaCreate from "./components/TareaCreate";
-import TareaUpdate from "./components/TareaUpdate";
+  completarTarea,
+} from "../../api";
 
 const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
   const [tasks, setTasks] = useState([]);
-  const [createForm, setCreateForm] = useState(false);
-  const [updateForm, setUpdateForm] = useState(false);
   const [updateList, setUpdateList] = useState(false);
   const [miTareas, setMiTareas] = useState([]);
 
@@ -25,8 +21,6 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
 
       await participarTarea(idTarea, idVoluntario);
       setUpdateList(!updateList);
-      setUpdate(false);
-      setCreate(false);
     } catch (error) {
       console.error("Update failed", error);
     }
@@ -34,10 +28,17 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
 
   const completar = async (item) => {
     try {
-      await updateTarea(item.id, item.title, item.description, "COMPLETED");
+      await completarTarea(item.id);
       setUpdateList(!updateList);
-      setUpdate(false);
-      setCreate(false);
+    } catch (error) {
+      console.error("Update failed", error);
+    }
+  };
+
+  const eliminar = async (id) => {
+    try {
+      await deleteTarea(id);
+      setUpdateList(!updateList);
     } catch (error) {
       console.error("Update failed", error);
     }
@@ -45,8 +46,8 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
 
   const all = async () => {
     try {
-      const { id } = await getPerfil();
       const data = await tareasDisponibles();
+      const { id } = await getPerfil();
 
       const misTareas = [];
       const tareas = [];
@@ -69,11 +70,6 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
   useEffect(() => {
     all();
   }, [updateList]);
-
-  const handleLogout = async () => {
-    await logout();
-    setIsLoggedIn(false);
-  };
 
   const Item = ({ id, title, description, status }) => (
     <View style={styles.item}>
@@ -103,7 +99,7 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
         <Button
           title="Completar"
           color="#f194ff"
-          onPress={() => completar({ id, title, description, status })}
+          onPress={() => completar({ id })}
         />
         <Button title="Eliminar" color="#FF0000" onPress={() => eliminar(id)} />
       </View>
@@ -112,25 +108,6 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
 
   return (
     <View style={styles.container}>
-      {createForm && !updateForm ? (
-        <TareaCreate
-          setUpdateList={setUpdateList}
-          setCreate={setCreateForm}
-          updateList={updateList}
-        />
-      ) : (
-        !updateForm && <Button title="Crear" onPress={crear} />
-      )}
-      {updateForm && (
-        <TareaUpdate
-          item={tarea}
-          setUpdateList={setUpdateList}
-          setUpdate={setUpdateForm}
-          setCreate={setCreateForm}
-          updateList={updateList}
-        />
-      )}
-
       <Text>Tareas:</Text>
       <FlatList
         data={tareas ?? tasks}
@@ -160,8 +137,6 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
           keyExtractor={(item) => item.id}
         />
       </View>
-
-      <Button title="Logout" onPress={handleLogout} />
     </View>
   );
 };

@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { saveTask, planesDisponibles, listLugares } from "../api";
 import DropdownComponent from "./Dropdown";
 
-const TareaCreate = ({ setUpdateList, setCreate, updateList }) => {
+const TareaCreate = ({ setUpdateList, setModalCreate, updateList, set }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
@@ -16,7 +16,7 @@ const TareaCreate = ({ setUpdateList, setCreate, updateList }) => {
     try {
       await saveTask(title, description, status, planId, lugarId);
       setUpdateList(!updateList);
-      setCreate(false);
+      setModalCreate(false);
     } catch (error) {
       console.error("Registration failed", error);
     }
@@ -50,11 +50,6 @@ const TareaCreate = ({ setUpdateList, setCreate, updateList }) => {
     }
   };
 
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setCreate(false);
-  };
-
   useEffect(() => {
     getPlanes();
     getLugares();
@@ -86,7 +81,6 @@ const TareaCreate = ({ setUpdateList, setCreate, updateList }) => {
       />
 
       <Button title="Crear" onPress={crear} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };

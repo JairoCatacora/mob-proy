@@ -91,7 +91,14 @@ export const saveTask = async (title, description, status, planId, lugarId) => {
   return response.data;
 };
 
-export const updateTarea = async (id, title, description, status) => {
+export const updateTarea = async (
+  id,
+  title,
+  description,
+  status,
+  planId,
+  lugarId
+) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.patch(
     `${API_URL}/tareas/${id}`,
@@ -100,7 +107,23 @@ export const updateTarea = async (id, title, description, status) => {
       title,
       description,
       status,
+      planId,
+      lugarId,
     },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const completarTarea = async (id) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/tareas/complete/${id}`,
+    {},
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -357,6 +380,16 @@ export const participatePlan = async (id, idCordinador) => {
       },
     }
   );
+  return response.data;
+};
+
+export const deleteTarea = async (id) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.delete(`${API_URL}/tareas/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 

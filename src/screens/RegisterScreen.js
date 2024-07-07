@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { register } from "./api";
+import { register } from "../api";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");

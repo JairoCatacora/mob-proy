@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { createLugar } from "../api";
 
-const LugarCreate = ({ setUpdateList, setCreate, updateList }) => {
+const LugarCreate = ({ setUpdateList, setModalCreate, updateList }) => {
   const [name, setName] = useState("");
   const [ubication, setUbication] = useState("");
 
@@ -10,15 +10,10 @@ const LugarCreate = ({ setUpdateList, setCreate, updateList }) => {
     try {
       await createLugar(name, ubication);
       setUpdateList(!updateList);
-      setCreate(false);
+      setModalCreate(false);
     } catch (error) {
       console.error("Registration failed", error);
     }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setCreate(false);
   };
 
   return (
@@ -32,7 +27,6 @@ const LugarCreate = ({ setUpdateList, setCreate, updateList }) => {
         onChangeText={setUbication}
       />
       <Button title="Crear" onPress={crear} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };

@@ -7,21 +7,10 @@ import {
   View,
   FlatList,
 } from "react-native";
-import {
-  updateLugar,
-  planesDisponibles,
-  listLugares,
-  getRoleBasedOnToken,
-} from "../api";
+import { planesDisponibles, listLugares, updateTarea } from "../api";
 import DropdownComponent from "./Dropdown";
 
-const TareaUpdate = ({
-  item,
-  setUpdateList,
-  setUpdate,
-  updateList,
-  setCreate,
-}) => {
+const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -35,19 +24,12 @@ const TareaUpdate = ({
 
   const actualizar = async () => {
     try {
-      await updateLugar(id, name, ubication);
+      await updateTarea(id, title, description, status, planId, lugarId);
       setUpdateList(!updateList);
-      setUpdate(false);
-      setCreate(false);
+      setModalUpdate(false);
     } catch (error) {
       console.error("Update failed", error);
     }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setUpdate(false);
-    setCreate(false);
   };
 
   const getPlanes = async () => {
@@ -88,7 +70,6 @@ const TareaUpdate = ({
     setSuministros(item.suministros);
     setCoordinadores(item.coordinadores);
 
-    getRole();
     getPlanes();
     getLugares();
   }, []);
@@ -169,7 +150,6 @@ const TareaUpdate = ({
       />
 
       <Button title="Actualizar" onPress={actualizar} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };
