@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { login } from "./api";
+import {
+  login,
+  getCoordinadorPerfil,
+  getRoleBasedOnToken,
+  getVoluntarioPerfil,
+} from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = ({ navigation, setIsLoggedIn }) => {
@@ -11,6 +16,16 @@ const LoginScreen = ({ navigation, setIsLoggedIn }) => {
     try {
       await login(email, password);
       setIsLoggedIn(true);
+
+      const role = await getRoleBasedOnToken();
+
+      if (role === "ROLE_COORDINATOR") {
+        await getCoordinadorPerfil();
+      }
+
+      if (role === "ROLE_VOLUNTEER") {
+        await getVoluntarioPerfil();
+      }
     } catch (error) {
       console.error("Login failed", error);
     }

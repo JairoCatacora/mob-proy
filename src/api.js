@@ -10,6 +10,37 @@ export const getRoleBasedOnToken = async () => {
   return decodedToken.role;
 };
 
+export const getPerfil = async () => {
+  const perfil = await AsyncStorage.getItem("perfil");
+  return JSON.parse(perfil);
+};
+
+export const getCoordinadorPerfil = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/coordinador/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  await AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+
+  return response.data;
+};
+
+export const getVoluntarioPerfil = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/voluntarios/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  await AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+
+  return response.data;
+};
+
 export const login = async (email, password) => {
   const response = await axios.post(`${API_URL}/auth/login`, {
     email,
@@ -19,13 +50,13 @@ export const login = async (email, password) => {
   return response.data;
 };
 
-export const register = async (name, email, password, phone, isTeacher) => {
+export const register = async (name, email, password, phone, isCoordinator) => {
   const response = await axios.post(`${API_URL}/auth/register`, {
     name,
     email,
     password,
     phone,
-    isTeacher,
+    isCoordinator,
   });
   return response.data;
 };
@@ -40,14 +71,16 @@ export const listTasks = async () => {
   return response.data;
 };
 
-export const saveTask = async (title, description, dueDate) => {
+export const saveTask = async (title, description, status, planId, lugarId) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.post(
     `${API_URL}/tareas/`,
     {
       title,
       description,
-      dueDate,
+      status,
+      planId,
+      lugarId,
     },
     {
       headers: {
@@ -56,6 +89,54 @@ export const saveTask = async (title, description, dueDate) => {
     }
   );
   return response.data;
+};
+
+export const updateTarea = async (id, title, description, status) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/tareas/${id}`,
+    {
+      id,
+      title,
+      description,
+      status,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const participarTarea = async (id, idVoluntario) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/tareas/${id}/assign/${idVoluntario}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const tareasDisponibles = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/tareas/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data.filter((item) => {
+    if (item.status !== "COMPLETED") {
+      return item;
+    }
+  });
 };
 
 export const saveEmergenciaNatural = async (name, description, importance) => {
@@ -219,6 +300,42 @@ export const listPlans = async () => {
   return response.data;
 };
 
+export const planesDisponibles = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/plans/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data.filter((item) => {
+    if (
+      item.state !== "REJECTED" ||
+      item.state !== "CANCELLED" ||
+      item.state !== "COMPLETED"
+    ) {
+      return item;
+    }
+  });
+};
+
+export const createSuministro = async (name, stock) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.post(
+    `${API_URL}/suministro`,
+    {
+      name,
+      stock,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 export const deletePlan = async (id) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.delete(`${API_URL}/plans/${id}`, {
@@ -229,6 +346,21 @@ export const deletePlan = async (id) => {
   return response.data;
 };
 
+export const participatePlan = async (id, idCordinador) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.post(
+    `${API_URL}/plans/${id}/coordinador/${idCordinador}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 export const logout = async () => {
   await AsyncStorage.removeItem("token");
+  await AsyncStorage.removeItem("perfil");
 };

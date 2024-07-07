@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import {
-  getRoleBasedOnToken,
-  tareasDisponibles,
-  logout,
-  updateTarea,
-  participarTarea,
   getPerfil,
+  logout,
+  participarTarea,
+  tareasDisponibles,
+  updateTarea,
 } from "./api";
 import TareaCreate from "./components/TareaCreate";
 import TareaUpdate from "./components/TareaUpdate";
-import TareaVoluntarioScreen from "./voluntario/TareaScreen";
 
-const TasksScreen = ({ setIsLoggedIn, route }) => {
+const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
   const [tasks, setTasks] = useState([]);
-  const [tarea, setTarea] = useState([]);
   const [createForm, setCreateForm] = useState(false);
   const [updateForm, setUpdateForm] = useState(false);
   const [updateList, setUpdateList] = useState(false);
-  const [role, setRole] = useState("");
   const [miTareas, setMiTareas] = useState([]);
 
   const tareas = route.params?.tareas;
-
-  const crear = async () => {
-    setCreateForm(true);
-  };
 
   const participar = async (idTarea) => {
     try {
@@ -51,12 +43,7 @@ const TasksScreen = ({ setIsLoggedIn, route }) => {
     }
   };
 
-  const actualizar = async (item) => {
-    setTarea(item);
-    setUpdateForm(true);
-  };
-
-  const allVoluntario = async () => {
+  const all = async () => {
     try {
       const { id } = await getPerfil();
       const data = await tareasDisponibles();
@@ -79,38 +66,7 @@ const TasksScreen = ({ setIsLoggedIn, route }) => {
     }
   };
 
-  const allCoordinador = async () => {
-    try {
-      const data = await tareasDisponibles();
-      setTasks(data);
-    } catch (error) {
-      console.error("Failed to fetch tasks", error);
-    }
-  };
-
-  const all = async () => {
-    const role = await getRoleBasedOnToken();
-
-    if (role === "ROLE_COORDINATOR") {
-      allCoordinador();
-    }
-
-    if (role === "ROLE_VOLUNTEER") {
-      allVoluntario();
-    }
-  };
-
-  const getRole = async () => {
-    try {
-      const data = await getRoleBasedOnToken();
-      setRole(data);
-    } catch (error) {
-      console.error("Failed to fetch profile", error);
-    }
-  };
-
   useEffect(() => {
-    getRole();
     all();
   }, [updateList]);
 
@@ -126,29 +82,13 @@ const TasksScreen = ({ setIsLoggedIn, route }) => {
       <Text style={styles.title}>{status}</Text>
 
       <View style={styles.actions}>
-        {role === "ROLE_COORDINATOR" && (
-          <View>
-            <Button
-              title="Actualizar"
-              color="#f194ff"
-              onPress={() => actualizar({ id, title, description, status })}
-            />
-            <Button
-              title="Eliminar"
-              color="#FF0000"
-              onPress={() => eliminar(id)}
-            />
-          </View>
-        )}
-        {role === "ROLE_VOLUNTEER" && (
-          <View>
-            <Button
-              title="Participar"
-              color="#f194ff"
-              onPress={() => participar(id)}
-            />
-          </View>
-        )}
+        <View>
+          <Button
+            title="Participar"
+            color="#f194ff"
+            onPress={() => participar(id)}
+          />
+        </View>
       </View>
     </View>
   );
@@ -172,46 +112,54 @@ const TasksScreen = ({ setIsLoggedIn, route }) => {
 
   return (
     <View style={styles.container}>
-      {role === "ROLE_COORDINATOR" && (
-        <View>
-          {createForm && !updateForm ? (
-            <TareaCreate
-              setUpdateList={setUpdateList}
-              setCreate={setCreateForm}
-              updateList={updateList}
-            />
-          ) : (
-            !updateForm && <Button title="Crear" onPress={crear} />
-          )}
-          {updateForm && (
-            <TareaUpdate
-              item={tarea}
-              setUpdateList={setUpdateList}
-              setUpdate={setUpdateForm}
-              setCreate={setCreateForm}
-              updateList={updateList}
-            />
-          )}
+      {createForm && !updateForm ? (
+        <TareaCreate
+          setUpdateList={setUpdateList}
+          setCreate={setCreateForm}
+          updateList={updateList}
+        />
+      ) : (
+        !updateForm && <Button title="Crear" onPress={crear} />
+      )}
+      {updateForm && (
+        <TareaUpdate
+          item={tarea}
+          setUpdateList={setUpdateList}
+          setUpdate={setUpdateForm}
+          setCreate={setCreateForm}
+          updateList={updateList}
+        />
+      )}
 
-          <Text>Tareas:</Text>
-          <FlatList
-            data={tareas ?? tasks}
-            renderItem={({ item }) => (
-              <Item
-                id={item.id}
-                title={item.title}
-                description={item.description}
-                status={item.status}
-              />
-            )}
-            keyExtractor={(item) => item.id}
+      <Text>Tareas:</Text>
+      <FlatList
+        data={tareas ?? tasks}
+        renderItem={({ item }) => (
+          <Item
+            id={item.id}
+            title={item.title}
+            description={item.description}
+            status={item.status}
           />
-        </View>
-      )}
+        )}
+        keyExtractor={(item) => item.id}
+      />
 
-      {role === "ROLE_VOLUNTEER" && (
-        <TareaVoluntarioScreen setIsLoggedIn={setIsLoggedIn} route={route} />
-      )}
+      <View>
+        <Text>Mis Tareas:</Text>
+        <FlatList
+          data={miTareas ?? tasks}
+          renderItem={({ item }) => (
+            <ItemMiTareas
+              id={item.id}
+              title={item.title}
+              description={item.description}
+              status={item.status}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
 
       <Button title="Logout" onPress={handleLogout} />
     </View>
@@ -240,4 +188,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TasksScreen;
+export default TareaVoluntarioScreen;

@@ -22,7 +22,7 @@ const LugarCreate = ({ setUpdateList, setCreate, updateList }) => {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
       <Text>Ubicación:</Text>
@@ -33,7 +33,7 @@ const LugarCreate = ({ setUpdateList, setCreate, updateList }) => {
       />
       <Button title="Crear" onPress={crear} />
       <Button title="Cancelar" onPress={cancel} />
-    </>
+    </View>
   );
 };
 

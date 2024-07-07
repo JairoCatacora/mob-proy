@@ -39,7 +39,7 @@ const EmergenciaNaturalUpdate = ({
   }, []);
 
   return (
-    <>
+    <View style={styles.container}>
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
       <Text>Descripción:</Text>
@@ -56,7 +56,7 @@ const EmergenciaNaturalUpdate = ({
       />
       <Button title="Actualizar" onPress={actualizarEmergenciaNatural} />
       <Button title="Cancelar" onPress={cancel} />
-    </>
+    </View>
   );
 };
 

@@ -37,7 +37,7 @@ const LugarUpdate = ({
   }, []);
 
   return (
-    <>
+    <View style={styles.container}>
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
       <Text>Ubicación:</Text>
@@ -48,7 +48,7 @@ const LugarUpdate = ({
       />
       <Button title="Actualizar" onPress={actualizar} />
       <Button title="Cancelar" onPress={cancel} />
-    </>
+    </View>
   );
 };
 

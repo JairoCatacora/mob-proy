@@ -1,44 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { saveEmergenciaNatural } from "../api";
+import { updateLugar } from "../api";
 
-const EmergenciaNaturalCreate = ({ setUpdateList, setCreate, updateList }) => {
+const SuministroUpdate = ({
+  item,
+  setUpdateList,
+  setUpdate,
+  updateList,
+  setCreate,
+}) => {
+  const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [importance, setImportance] = useState("");
+  const [ubication, setUbication] = useState("");
 
-  const createEmergenciaNatural = async () => {
+  const actualizar = async () => {
     try {
-      await saveEmergenciaNatural(name, description, importance);
+      await updateLugar(id, name, ubication);
       setUpdateList(!updateList);
+      setUpdate(false);
       setCreate(false);
     } catch (error) {
-      console.error("Registration failed", error);
+      console.error("Update failed", error);
     }
   };
 
   const cancel = () => {
     setUpdateList(!updateList);
+    setUpdate(false);
     setCreate(false);
   };
+
+  useEffect(() => {
+    setId(item.id);
+    setName(item.name);
+    setUbication(item.ubication);
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
-      <Text>Descripción:</Text>
+      <Text>Ubicación:</Text>
       <TextInput
         style={styles.input}
-        value={description}
-        onChangeText={setDescription}
+        value={ubication}
+        onChangeText={setUbication}
       />
-      <Text>Importancia:</Text>
-      <TextInput
-        style={styles.input}
-        value={importance}
-        onChangeText={setImportance}
-      />
-      <Button title="Crear" onPress={createEmergenciaNatural} />
+      <Button title="Actualizar" onPress={actualizar} />
       <Button title="Cancelar" onPress={cancel} />
     </View>
   );
@@ -65,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EmergenciaNaturalCreate;
+export default SuministroUpdate;
