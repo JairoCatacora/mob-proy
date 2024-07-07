@@ -20,7 +20,7 @@ const AuthStack = ({ setIsLoggedIn }) => (
 );
 
 const AppTabs = ({ setIsLoggedIn }) => (
-  <Tab.Navigator initialRouteName="Tasks">
+  <Tab.Navigator initialRouteName="EmergenciaNatural">
     <Tab.Screen name="Tasks">
       {(props) => <TasksScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
     </Tab.Screen>

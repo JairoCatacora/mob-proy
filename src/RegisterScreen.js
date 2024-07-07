@@ -22,7 +22,7 @@ const RegisterScreen = ({ navigation }) => {
 
   const handleRegister = async () => {
     try {
-      await register(name, email, password, isCoordinator);
+      await register(name, email, password, phone, isCoordinator);
       navigation.navigate("Login");
     } catch (error) {
       console.error("Registration failed", error);
@@ -58,7 +58,7 @@ const RegisterScreen = ({ navigation }) => {
         style={styles.input}
         value={phone}
         onChangeText={setPhone}
-        placeholder="Enter your password"        
+        placeholder="Enter your password"
       />
       <View style={styles.checkboxContainer}>
         <TouchableOpacity onPress={toggleCheckbox} style={styles.checkbox}>

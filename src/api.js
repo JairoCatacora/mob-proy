@@ -4,8 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API_URL = "http://192.168.18.12:8080";
 
-export const getRoleBasedOnToken = () => {
-  const token = localStorage.getItem("token");
+export const getRoleBasedOnToken = async () => {
+  const token = await AsyncStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   return decodedToken.role;
 };
@@ -96,6 +96,50 @@ export const saveEmergenciaNatural = async (name, description, importance) => {
   );
   return response.data;
 };
+
+export const deleteEmergenciaNatural = async (id) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.delete(
+    `${API_URL}/emergenciaNatural/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateEmergenciaNatural = async (id, name, description, importance) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/emergenciaNatural/${id}`,
+    {
+      name,
+      description,
+      importance,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const listEmergenciaNatural = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(
+    `${API_URL}/emergenciaNatural/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+}
 
 export const logout = async () => {
   await AsyncStorage.removeItem("token");

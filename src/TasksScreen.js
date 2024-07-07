@@ -4,7 +4,6 @@ import { listTasks, logout, getRoleBasedOnToken, saveTask } from "./api";
 
 const TasksScreen = ({ setIsLoggedIn }) => {
   const [tasks, setTasks] = useState([]);
-  const [selectedId, setSelectedId] = useState();
 
   const getTasks = async () => {
     try {
@@ -43,38 +42,15 @@ const TasksScreen = ({ setIsLoggedIn }) => {
     setIsLoggedIn(false);
   };
 
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.item, { backgroundColor }]}
-    >
-      <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selectedId ? "white" : "black";
-
-    return (
-      <Item
-        item={item}
-        onPress={() => setSelectedId(item.id)}
-        backgroundColor={backgroundColor}
-        textColor={color}
-      />
-    );
-  };
-
   return (
     <View style={styles.container}>
       <Text>Tareas:</Text>
-      <FlatList
+      {/* <FlatList
         data={tasks}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         extraData={selectedId}
-      />
+      /> */}
 
       <Button onPress={createTask} title="Crear nueva tarea" color="#841584" />
 
