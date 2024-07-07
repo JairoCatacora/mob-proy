@@ -1,71 +1,56 @@
 import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { saveTask, planesDisponibles } from "../api";
+import { createSuministro, tareasDisponibles } from "../api";
 import DropdownComponent from "./Dropdown";
 
-const SuministroCreate = ({ setUpdateList, setCreate, updateList }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
-  const [planes, setPlanes] = useState([]);
+const SuministroCreate = ({ setUpdateList, setModalCreate, updateList }) => {
+  const [name, setName] = useState("");
+  const [stock, setStock] = useState("");
+  const [tareaId, setTareaId] = useState("");
+  const [tareas, setTareas] = useState([]);
 
-  const crearSuministro = async () => {
+  const allTareas = async () => {
     try {
+      const data = await tareasDisponibles();
+      const dropdownData = data.map((item) => ({
+        label: item.title,
+        value: item.id,
+      }));
+      setTareas(dropdownData);
     } catch (error) {
-      console.error("Registration failed", error);
+      console.error("Failed to fetch tasks", error);
     }
   };
 
   const crear = async () => {
     try {
-      await saveTask(title, description, status);
+      await createSuministro(name, stock, tareaId);
       setUpdateList(!updateList);
-      setCreate(false);
+      setModalCreate(false);
     } catch (error) {
       console.error("Registration failed", error);
     }
   };
 
-  const getPlanes = async () => {
-    try {
-      const data = await planesDisponibles();
-      const dropdownData = data.map((item) => ({
-        label: item.name,
-        value: item.id,
-      }));
-
-      setPlanes(dropdownData);
-    } catch (error) {
-      console.error("Failed to fetch profile", error);
-    }
-  };
-
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setCreate(false);
-  };
-
   useEffect(() => {
-    getPlanes();
+    allTareas();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Titulo:</Text>
-      <TextInput style={styles.input} value={title} onChangeText={setTitle} />
-      <Text>Descripción:</Text>
-      <TextInput
-        style={styles.input}
-        value={description}
-        onChangeText={setDescription}
+      <Text>Nombre:</Text>
+      <TextInput style={styles.input} value={name} onChangeText={setName} />
+      <Text>Stock:</Text>
+      <TextInput style={styles.input} value={stock} onChangeText={setStock} />
+      <Text>Tareas:</Text>
+      <DropdownComponent
+        data={tareas}
+        label="Tareas disponibles"
+        value={tareaId}
+        setValue={setTareaId}
       />
-      <Text>Estado:</Text>
-      <TextInput style={styles.input} value={status} onChangeText={setStatus} />
-      <DropdownComponent data={planes} label="Planes disponibles" />
 
-      <Button title="Crear Suministro" onPress={crearSuministro} />
       <Button title="Crear" onPress={crear} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };

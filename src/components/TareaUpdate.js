@@ -19,12 +19,24 @@ const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
   const [lugares, setLugares] = useState([]);
   const [planId, setPlanId] = useState([]);
   const [lugarId, setLugarId] = useState([]);
-  const [suministros, setSuministros] = useState("");
   const [coordinadores, setCoordinadores] = useState("");
+
+  const [name, setName] = useState([]);
+  const [stock, setStock] = useState([]);
+
+  const [suministros, setSuministros] = useState([]);
 
   const actualizar = async () => {
     try {
-      await updateTarea(id, title, description, status, planId, lugarId);
+      await updateTarea(
+        id,
+        title,
+        description,
+        status,
+        planId,
+        lugarId,
+        suministros
+      );
       setUpdateList(!updateList);
       setModalUpdate(false);
     } catch (error) {
@@ -96,6 +108,13 @@ const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
     </View>
   );
 
+  const ItemSuministro = ({ name, stock }) => (
+    <View>
+      <Text>Nombre: {name}</Text>
+      <Text>Stock: {stock}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Text>Titulo:</Text>
@@ -121,19 +140,20 @@ const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
         setValue={setLugarId}
       />
 
-      <Text>Suministros:</Text>
-      <FlatList
-        data={suministros}
-        renderItem={({ item }) => (
-          <Item
-            id={item.id}
-            name={item.name}
-            description={item.description}
-            state={item.state}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-      />
+      <View>
+        <Text>Suministros:</Text>
+        <FlatList
+          data={suministros}
+          renderItem={({ item }) => (
+            <ItemSuministro id={item.id} name={item.name} stock={item.stock} />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+        <Text>Titulo:</Text>
+        <TextInput style={styles.input} value={name} onChangeText={setName} />
+        <Text>Stock:</Text>
+        <TextInput style={styles.input} value={stock} onChangeText={setStock} />
+      </View>
 
       <Text>Coordinadores:</Text>
       <FlatList

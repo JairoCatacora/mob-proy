@@ -1,39 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { updateLugar } from "../api";
+import { actualizarSuministro, tareasDisponibles } from "../api";
+import DropdownComponent from "./Dropdown";
 
 const SuministroUpdate = ({
   item,
   setUpdateList,
-  setUpdate,
+  setModalUpdate,
   updateList,
-  setCreate,
 }) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [ubication, setUbication] = useState("");
+  const [stock, setStock] = useState("");
+  const [tareas, setTareas] = useState([]);
+  const [tareaId, setTareaId] = useState("");
+
+  const allTareas = async () => {
+    try {
+      const data = await tareasDisponibles();
+      const dropdownData = data.map((item) => ({
+        label: item.title,
+        value: item.id,
+      }));
+      setTareas(dropdownData);
+    } catch (error) {
+      console.error("Failed to fetch tasks", error);
+    }
+  };
 
   const actualizar = async () => {
     try {
-      await updateLugar(id, name, ubication);
+      await actualizarSuministro(id, name, stock);
       setUpdateList(!updateList);
-      setUpdate(false);
-      setCreate(false);
+      setModalUpdate(false);
     } catch (error) {
       console.error("Update failed", error);
     }
   };
 
-  const cancel = () => {
-    setUpdateList(!updateList);
-    setUpdate(false);
-    setCreate(false);
-  };
-
   useEffect(() => {
     setId(item.id);
     setName(item.name);
-    setUbication(item.ubication);
+    setStock(item.stock);
+
+    allTareas();
   }, []);
 
   return (
@@ -41,13 +51,16 @@ const SuministroUpdate = ({
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
       <Text>Ubicación:</Text>
-      <TextInput
-        style={styles.input}
-        value={ubication}
-        onChangeText={setUbication}
+      <TextInput style={styles.input} value={stock} onChangeText={setStock} />
+      <Text>Tareas:</Text>
+      <DropdownComponent
+        data={tareas}
+        label="Tareas disponibles"
+        value={tareaId}
+        setValue={setTareaId}
       />
+
       <Button title="Actualizar" onPress={actualizar} />
-      <Button title="Cancelar" onPress={cancel} />
     </View>
   );
 };

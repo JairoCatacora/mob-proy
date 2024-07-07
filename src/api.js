@@ -71,7 +71,14 @@ export const listTasks = async () => {
   return response.data;
 };
 
-export const saveTask = async (title, description, status, planId, lugarId) => {
+export const saveTask = async (
+  title,
+  description,
+  status,
+  planId,
+  lugarId,
+  suministros
+) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.post(
     `${API_URL}/tareas/`,
@@ -81,6 +88,7 @@ export const saveTask = async (title, description, status, planId, lugarId) => {
       status,
       planId,
       lugarId,
+      suministros,
     },
     {
       headers: {
@@ -97,7 +105,8 @@ export const updateTarea = async (
   description,
   status,
   planId,
-  lugarId
+  lugarId,
+  suministros
 ) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.patch(
@@ -109,6 +118,7 @@ export const updateTarea = async (
       status,
       planId,
       lugarId,
+      suministros,
     },
     {
       headers: {
@@ -250,13 +260,13 @@ export const createLugar = async (name, ubication) => {
   return response.data;
 };
 
-export const updateLugar = async (id, name, ubication) => {
+export const updateLugar = async (id, name, stock) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.patch(
     `${API_URL}/lugar/${id}`,
     {
       name,
-      ubication,
+      stock,
     },
     {
       headers: {
@@ -342,10 +352,28 @@ export const planesDisponibles = async () => {
   });
 };
 
-export const createSuministro = async (name, stock) => {
+export const createSuministro = async (name, stock, tareaId) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.post(
     `${API_URL}/suministro`,
+    {
+      name,
+      stock,
+      tareaId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const actualizarSuministro = async (id, name, stock) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/suministro/${id}`,
     {
       name,
       stock,
@@ -356,6 +384,16 @@ export const createSuministro = async (name, stock) => {
       },
     }
   );
+  return response.data;
+};
+
+export const eliminarSuministro = async (id) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.delete(`${API_URL}/suministro/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
@@ -386,6 +424,16 @@ export const participatePlan = async (id, idCordinador) => {
 export const deleteTarea = async (id) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.delete(`${API_URL}/tareas/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const listSuministros = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/suministro/`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

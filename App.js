@@ -9,6 +9,7 @@ import PlanScreen from "./src/screens/coordinador/PlanScreen";
 import PerfilScreen from "./src/screens/PerfilScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import TasksScreen from "./src/screens/TasksScreen";
+import SuministroScreen from "./src/screens/coordinador/SuministroScreen";
 import { ROLE_COORDINATOR } from "./src/constants/role";
 
 const Stack = createStackNavigator();
@@ -41,6 +42,9 @@ const AppCoordinadorTabs = ({ setIsLoggedIn }) => (
       {(props) => <LugaresScreen {...props} />}
     </Tab.Screen>
     <Tab.Screen name="Plan">{(props) => <PlanScreen {...props} />}</Tab.Screen>
+    <Tab.Screen name="Suministro">
+      {(props) => <SuministroScreen {...props} />}
+    </Tab.Screen>
     <Tab.Screen name="Perfil">
       {(props) => <PerfilScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
     </Tab.Screen>

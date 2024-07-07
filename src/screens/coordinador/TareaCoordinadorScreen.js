@@ -54,7 +54,7 @@ const TareaCoordinadorScreen = ({ setIsLoggedIn, route }) => {
     all();
   }, [updateList]);
 
-  const Item = ({ id, title, description, status }) => (
+  const Item = ({ id, title, description, status, suministros }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.title}>{description}</Text>
@@ -64,7 +64,9 @@ const TareaCoordinadorScreen = ({ setIsLoggedIn, route }) => {
         <Button
           title="Actualizar"
           color="#f194ff"
-          onPress={() => actualizar({ id, title, description, status })}
+          onPress={() =>
+            actualizar({ id, title, description, status, suministros })
+          }
         />
         <Button title="Eliminar" color="#FF0000" onPress={() => eliminar(id)} />
       </View>
@@ -84,6 +86,7 @@ const TareaCoordinadorScreen = ({ setIsLoggedIn, route }) => {
               title={item.title}
               description={item.description}
               status={item.status}
+              suministros={item.suministros}
             />
           )}
           keyExtractor={(item) => item.id}
