@@ -58,27 +58,6 @@ export const saveTask = async (title, description, dueDate) => {
   return response.data;
 };
 
-export const savePlan = async (name, description, emergenciaNatural) => {
-  const token = await AsyncStorage.getItem("token");
-  const response = await axios.post(
-    `${API_URL}/plans/`,
-    {
-      name,
-      description,
-      state,
-      tasks,
-      coordinadores,
-      emergenciaNatural,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
-};
-
 export const saveEmergenciaNatural = async (name, description, importance) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.post(
@@ -187,6 +166,62 @@ export const updateLugar = async (id, name, ubication) => {
 export const deleteLugar = async (id) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.delete(`${API_URL}/lugar/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const createPlan = async (name, description, state) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.post(
+    `${API_URL}/plans/`,
+    {
+      name,
+      description,
+      state,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updatePlan = async (id, name, description, state) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.patch(
+    `${API_URL}/plans/${id}`,
+    {
+      name,
+      description,
+      state,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const listPlans = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/plans/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const deletePlan = async (id) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.delete(`${API_URL}/plans/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

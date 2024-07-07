@@ -1,52 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { updateLugar } from "../api";
+import { createPlan } from "../api";
 
-const LugarUpdate = ({
-  item,
-  setUpdateList,
-  setUpdate,
-  updateList,
-  setCreate,
-}) => {
-  const [id, setId] = useState("");
+const PlanCreate = ({ setUpdateList, setCreate, updateList }) => {
   const [name, setName] = useState("");
-  const [ubication, setUbication] = useState("");
+  const [description, setDescription] = useState("");
+  const [state, setState] = useState("");
 
-  const actualizar = async () => {
+  const crear = async () => {
     try {
-      await updateLugar(id, name, ubication);
+      await createPlan(name, description, state);
       setUpdateList(!updateList);
-      setUpdate(false);
       setCreate(false);
     } catch (error) {
-      console.error("Update failed", error);
+      console.error("Registration failed", error);
     }
   };
 
   const cancel = () => {
     setUpdateList(!updateList);
-    setUpdate(false);
     setCreate(false);
   };
-
-  useEffect(() => {
-    setId(item.id);
-    setName(item.name);
-    setUbication(item.ubication);
-  }, []);
 
   return (
     <>
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
-      <Text>Ubicación:</Text>
+      <Text>Descripción:</Text>
       <TextInput
         style={styles.input}
-        value={ubication}
-        onChangeText={setUbication}
+        value={description}
+        onChangeText={setDescription}
       />
-      <Button title="Actualizar" onPress={actualizar} />
+      <Text>Estado:</Text>
+      <TextInput style={styles.input} value={state} onChangeText={setState} />
+      <Button title="Crear" onPress={crear} />
       <Button title="Cancelar" onPress={cancel} />
     </>
   );
@@ -73,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LugarUpdate;
+export default PlanCreate;

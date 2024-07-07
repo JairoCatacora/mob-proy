@@ -7,6 +7,7 @@ import RegisterScreen from "./src/RegisterScreen";
 import TasksScreen from "./src/TasksScreen";
 import EmergenciaNaturalScreen from "./src/EmergenciaNaturalScreen";
 import LugaresScreen from "./src/LugaresScreen";
+import PlanScreen from "./src/PlanScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,7 +22,7 @@ const AuthStack = ({ setIsLoggedIn }) => (
 );
 
 const AppTabs = ({ setIsLoggedIn }) => (
-  <Tab.Navigator initialRouteName="Lugares">
+  <Tab.Navigator initialRouteName="Plan">
     <Tab.Screen name="Tareas">
       {(props) => <TasksScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
     </Tab.Screen>
@@ -32,6 +33,9 @@ const AppTabs = ({ setIsLoggedIn }) => (
     </Tab.Screen>
     <Tab.Screen name="Lugares">
       {(props) => <LugaresScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+    </Tab.Screen>
+    <Tab.Screen name="Plan">
+      {(props) => <PlanScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
     </Tab.Screen>
   </Tab.Navigator>
 );

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { updateLugar } from "../api";
+import { updatePlan } from "../api";
 
-const LugarUpdate = ({
+const PlanUpdate = ({
   item,
   setUpdateList,
   setUpdate,
@@ -11,11 +11,12 @@ const LugarUpdate = ({
 }) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [ubication, setUbication] = useState("");
+  const [description, setDescription] = useState("");
+  const [state, setState] = useState("");
 
   const actualizar = async () => {
     try {
-      await updateLugar(id, name, ubication);
+      await updatePlan(id, name, description,state);
       setUpdateList(!updateList);
       setUpdate(false);
       setCreate(false);
@@ -33,22 +34,25 @@ const LugarUpdate = ({
   useEffect(() => {
     setId(item.id);
     setName(item.name);
-    setUbication(item.ubication);
+    setDescription(item.description);
+    setState(item.state);
   }, []);
 
   return (
-    <>
+    <View style={styles.container}>
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
-      <Text>Ubicación:</Text>
+      <Text>Descripción:</Text>
       <TextInput
         style={styles.input}
-        value={ubication}
-        onChangeText={setUbication}
+        value={description}
+        onChangeText={setDescription}
       />
+      <Text>Estado:</Text>
+      <TextInput style={styles.input} value={state} onChangeText={setState} />
       <Button title="Actualizar" onPress={actualizar} />
       <Button title="Cancelar" onPress={cancel} />
-    </>
+    </View>
   );
 };
 
@@ -73,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LugarUpdate;
+export default PlanUpdate;

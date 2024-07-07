@@ -6,7 +6,7 @@ const LugarCreate = ({ setUpdateList, setCreate, updateList }) => {
   const [name, setName] = useState("");
   const [ubication, setUbication] = useState("");
 
-  const createEmergenciaNatural = async () => {
+  const crear = async () => {
     try {
       await createLugar(name, ubication);
       setUpdateList(!updateList);
@@ -31,7 +31,7 @@ const LugarCreate = ({ setUpdateList, setCreate, updateList }) => {
         value={ubication}
         onChangeText={setUbication}
       />
-      <Button title="Crear" onPress={createEmergenciaNatural} />
+      <Button title="Crear" onPress={crear} />
       <Button title="Cancelar" onPress={cancel} />
     </>
   );
