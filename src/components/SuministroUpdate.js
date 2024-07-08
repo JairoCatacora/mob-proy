@@ -50,7 +50,7 @@ const SuministroUpdate = ({
     <View style={styles.container}>
       <Text>Nombre:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
-      <Text>Ubicación:</Text>
+      <Text>Stock:</Text>
       <TextInput style={styles.input} value={stock} onChangeText={setStock} />
       <Text>Tareas:</Text>
       <DropdownComponent

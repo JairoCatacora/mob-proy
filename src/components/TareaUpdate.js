@@ -19,24 +19,10 @@ const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
   const [lugares, setLugares] = useState([]);
   const [planId, setPlanId] = useState([]);
   const [lugarId, setLugarId] = useState([]);
-  const [coordinadores, setCoordinadores] = useState("");
-
-  const [name, setName] = useState([]);
-  const [stock, setStock] = useState([]);
-
-  const [suministros, setSuministros] = useState([]);
 
   const actualizar = async () => {
     try {
-      await updateTarea(
-        id,
-        title,
-        description,
-        status,
-        planId,
-        lugarId,
-        suministros
-      );
+      await updateTarea(id, title, description, status, planId, lugarId);
       setUpdateList(!updateList);
       setModalUpdate(false);
     } catch (error) {
@@ -79,8 +65,6 @@ const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
     setStatus(item.status);
     setPlanId(item.planId);
     setLugarId(item.lugarId);
-    setSuministros(item.suministros);
-    setCoordinadores(item.coordinadores);
 
     getPlanes();
     getLugares();
@@ -91,27 +75,6 @@ const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
       <Text style={styles.title}>{name}</Text>
       <Text style={styles.title}>{description}</Text>
       <Text style={styles.title}>{state}</Text>
-
-      <View style={styles.actions}>
-        <Button
-          title="Actualizar"
-          color="#f194ff"
-          onPress={() => actualizar({ id, name, description, state })}
-        />
-        <Button
-          title="Participar"
-          color="#FF0000"
-          onPress={() => participar(id)}
-        />
-        <Button title="Eliminar" color="#FF0000" onPress={() => eliminar(id)} />
-      </View>
-    </View>
-  );
-
-  const ItemSuministro = ({ name, stock }) => (
-    <View>
-      <Text>Nombre: {name}</Text>
-      <Text>Stock: {stock}</Text>
     </View>
   );
 
@@ -138,35 +101,6 @@ const TareaUpdate = ({ item, setUpdateList, setModalUpdate, updateList }) => {
         label="Lugares disponibles"
         value={lugarId}
         setValue={setLugarId}
-      />
-
-      <View>
-        <Text>Suministros:</Text>
-        <FlatList
-          data={suministros}
-          renderItem={({ item }) => (
-            <ItemSuministro id={item.id} name={item.name} stock={item.stock} />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-        <Text>Titulo:</Text>
-        <TextInput style={styles.input} value={name} onChangeText={setName} />
-        <Text>Stock:</Text>
-        <TextInput style={styles.input} value={stock} onChangeText={setStock} />
-      </View>
-
-      <Text>Coordinadores:</Text>
-      <FlatList
-        data={coordinadores}
-        renderItem={({ item }) => (
-          <Item
-            id={item.id}
-            name={item.name}
-            description={item.description}
-            state={item.state}
-          />
-        )}
-        keyExtractor={(item) => item.id}
       />
 
       <Button title="Actualizar" onPress={actualizar} />

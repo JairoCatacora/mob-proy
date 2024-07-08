@@ -97,8 +97,7 @@ export const updateTarea = async (
   description,
   status,
   planId,
-  lugarId,
-  suministros
+  lugarId
 ) => {
   const token = await AsyncStorage.getItem("token");
   const response = await axios.patch(
@@ -110,7 +109,6 @@ export const updateTarea = async (
       status,
       planId,
       lugarId,
-      suministros,
     },
     {
       headers: {
@@ -438,6 +436,19 @@ export const asignarSuministroATarea = async (id, idTarea) => {
   const response = await axios.patch(
     `${API_URL}/suministro/${id}/tarea/${idTarea}`,
     {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const eliminarVoluntarioTarea = async (id, idVoluntario) => {
+  const token = await AsyncStorage.getItem("token");
+  const response = await axios.delete(
+    `${API_URL}/tareas/${id}/remove/${idVoluntario}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

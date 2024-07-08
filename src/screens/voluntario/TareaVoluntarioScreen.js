@@ -6,6 +6,7 @@ import {
   participarTarea,
   tareasDisponibles,
   completarTarea,
+  eliminarVoluntarioTarea,
 } from "../../api";
 
 const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
@@ -37,7 +38,9 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
 
   const eliminar = async (id) => {
     try {
-      await deleteTarea(id);
+      const { id: idVoluntario } = await getPerfil();
+
+      await eliminarVoluntarioTarea(id, idVoluntario);
       setUpdateList(!updateList);
     } catch (error) {
       console.error("Update failed", error);
@@ -108,6 +111,20 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
 
   return (
     <View style={styles.container}>
+      <Text>Mis Tareas:</Text>
+      <FlatList
+        data={miTareas ?? tasks}
+        renderItem={({ item }) => (
+          <ItemMiTareas
+            id={item.id}
+            title={item.title}
+            description={item.description}
+            status={item.status}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+      />
+
       <Text>Tareas:</Text>
       <FlatList
         data={tareas ?? tasks}
@@ -121,22 +138,6 @@ const TareaVoluntarioScreen = ({ setIsLoggedIn, route }) => {
         )}
         keyExtractor={(item) => item.id}
       />
-
-      <View>
-        <Text>Mis Tareas:</Text>
-        <FlatList
-          data={miTareas ?? tasks}
-          renderItem={({ item }) => (
-            <ItemMiTareas
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              status={item.status}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
     </View>
   );
 };

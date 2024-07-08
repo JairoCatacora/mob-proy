@@ -51,9 +51,9 @@ const LugaresScreen = ({}) => {
     all();
   }, [updateList]);
 
-  const ItemTarea = ({ id, name, description }) => (
+  const ItemTarea = ({ id, title, description }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{name}</Text>
+      <Text style={styles.title}>{title}</Text>
       <Text style={styles.title}>{description}</Text>
     </View>
   );
